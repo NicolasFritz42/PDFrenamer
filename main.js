@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -47,4 +47,15 @@ ipcMain.handle('rename-pdf', async (event, { oldPath, newPath }) => {
       else resolve(true);
     });
   });
+});
+
+// Ouvrir un PDF avec l'application système
+ipcMain.handle('open-pdf-with-system', async (event, pdfPath) => {
+  try {
+    await shell.openPath(pdfPath);
+    return true;
+  } catch (error) {
+    console.error("Erreur lors de l'ouverture du PDF :", error);
+    throw error;
+  }
 });

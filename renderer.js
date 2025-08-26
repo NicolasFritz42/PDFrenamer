@@ -18,9 +18,9 @@ document.getElementById('selectFolder').addEventListener('click', async () => {
           const pdfItem = document.createElement('div');
           pdfItem.innerHTML = `
             <p>
-              ${pdf}
-              <button onclick="viewPdf(${folderPath}', '${pdf}')">Voir</button>
-              <button onclick="promptRename('${folderPath}', '${pdf}')">Renommer</button>
+              <span>${pdf}</span>
+              <button onclick="viewPdf('${folderPath}', this)">Voir</button>
+              <button onclick="promptRename('${folderPath}', this)">Renommer</button>
             </p>
           `;
           pdfList.appendChild(pdfItem);
@@ -32,35 +32,27 @@ document.getElementById('selectFolder').addEventListener('click', async () => {
   }
 });
 
-// Afficher le contenu du PDF
-async function viewPdf(folderPath, pdfName) {
+// Ouvrir le PDF avec l'application système
+async function viewPdf(folderPath, button) {
+  const pdfName = button.parentNode.querySelector('span').textContent.trim()
   try {
     const pdfPath = folderPath + '/' + pdfName;
-    console.log("Chemin du PDF :", pdfPath);
-
-    /* const loadingTask = pdfjsLib.getDocument(pdfPath);
-    const pdfDocument = await loadingTask.promise;
-    const page = await pdfDocument.getPage(1);
-    const scale = 1.5;
-    const viewport = page.getViewport({ scale: scale });
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-    canvas.height = viewport.height;
-    canvas.width = viewport.width;
-    await page.render({
-      canvasContext: context,
-      viewport: viewport,
-    }).promise;
-    const pdfViewer = document.getElementById('pdfViewer');
-    pdfViewer.innerHTML = '';
-    pdfViewer.appendChild(canvas); */
+    console.log("Ouverture du PDF :", pdfPath);
+    await window.electronAPI.openPdfWithSystem(pdfPath);
   } catch (error) {
-    console.error("Erreur lors de l'affichage du PDF :", error);
+    console.error("Erreur lors de l'ouverture du PDF :", error);
+    Swal.fire({
+      title: 'Erreur !',
+      text: `Impossible d'ouvrir le PDF : ${error}`,
+      icon: 'error',
+      confirmButtonText: 'OK'
+    });
   }
 }
 
 // Renommer un PDF
-async function promptRename(folderPath, pdfName) {
+async function promptRename(folderPath, button) {
+  const pdfName = button.parentNode.querySelector('span').textContent.trim()
   const result = await Swal.fire({
     title: 'Renommer le PDF',
     input: 'text',
@@ -88,7 +80,7 @@ async function promptRename(folderPath, pdfName) {
         icon: 'success',
         confirmButtonText: 'OK'
       }).then(() => {
-        location.reload();
+        button.parentNode.querySelector('span').textContent = `${newName}.pdf`
       });
     } catch (err) {
       Swal.fire({
