@@ -4,6 +4,7 @@
 - node v22.16.0+
 
 ## Structure du projet
+```
 pdf-renamer-app/
 ├── main.js
 ├── package.json
@@ -11,3 +12,4 @@ pdf-renamer-app/
 ├── style.css
 ├── renderer.js
 └── assets/ (dossier pour les icônes)
+```
