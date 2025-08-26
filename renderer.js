@@ -61,16 +61,42 @@ async function viewPdf(folderPath, pdfName) {
 
 // Renommer un PDF
 async function promptRename(folderPath, pdfName) {
-  const newName = prompt("Nouveau nom (sans extension) :", pdfName.replace('.pdf', ''));
-  if (newName) {
-    const oldPath = path.join(folderPath, pdfName);
-    const newPath = path.join(folderPath, `${newName}.pdf`);
+  const result = await Swal.fire({
+    title: 'Renommer le PDF',
+    input: 'text',
+    inputValue: pdfName.replace('.pdf', ''),
+    inputPlaceholder: 'Nouveau nom (sans extension)',
+    showCancelButton: true,
+    confirmButtonText: 'Renommer',
+    cancelButtonText: 'Annuler',
+    inputValidator: (value) => {
+      if (!value) {
+        return 'Vous devez entrer un nom !';
+      }
+    }
+  });
+
+  if (result.isConfirmed && result.value) {
+    const newName = result.value;
+    const oldPath = folderPath + '/' + pdfName;
+    const newPath = folderPath + '/' + `${newName}.pdf`;
     try {
       await window.electronAPI.renamePdf(oldPath, newPath);
-      alert('PDF renommé avec succès !');
-      location.reload();
+      Swal.fire({
+        title: 'Succès !',
+        text: 'PDF renommé avec succès !',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      }).then(() => {
+        location.reload();
+      });
     } catch (err) {
-      alert(`Erreur : ${err}`);
+      Swal.fire({
+        title: 'Erreur !',
+        text: `Erreur : ${err}`,
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
     }
   }
 }
