@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Navigateur et Renommeur de PDFs</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f4f4f9;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    button {
+      background-color: #9b59b6;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 10px 2px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    #pdfList {
+      margin-top: 20px;
+    }
+    #pdfViewer {
+      margin-top: 20px;
+      width: 100%;
+      height: 500px;
+      border: 1px solid #ccc;
+      background-color: white;
+    }
+  </style>
+</head>
+<body>
+  <h1>Navigateur et Renommeur de PDFs</h1>
+  <div>
+    <h2>Sélectionner le dossier des PDFs</h2>
+    <button id="selectFolder">Choisir un dossier</button>
+    <span id="selectedFolder">Aucun dossier sélectionné</span>
+  </div>
+  <div id="pdfList"></div>
+  <div id="pdfViewer"></div>
+  <script src="renderer.js"></script>
+</body>
+</html>
