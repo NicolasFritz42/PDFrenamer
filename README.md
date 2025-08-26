@@ -3,6 +3,18 @@
 ## Outils
 - node v22.16.0+
 
+## Démarrer le projet
+```
+# installer les dépendences (première fois uniquement)
+npm install
+
+# lancer le projet
+npm start
+
+# compiler en app electron
+npm pack
+```
+
 ## Structure du projet
 ```
 pdf-renamer-app/
